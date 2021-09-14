@@ -9,7 +9,11 @@ import {
   SET_QUESTIONS,
   SET_QUESTION_INDEX,
 } from "../Actions/playActions";
-
+/*{
+  dbname: "Aléatoire",
+  image: 34,
+  name: "Aléatoire",
+}*/
 // init state for game
 const initState = {
   play: "hhhhhhh",

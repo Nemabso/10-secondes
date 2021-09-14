@@ -14,7 +14,9 @@ import Warning from "./src/pages/Warning";
 import { store, persistor } from "./store";
 import Rappel from "./src/pages/Rappel";
 import Question from "./src/pages/Question";
-import Gestion from "./src/pages/Gestion";
+import Scores from "./src/pages/Scores";
+import Penalty from "./src/pages/Penalty";
+//import Gestion from "./src/pages/Gestion";
 import Categories from "./src/pages/Categories";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -36,6 +38,16 @@ export default function App() {
             <Stack.Screen
               name="Question"
               component={Question}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Scores"
+              component={Scores}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Penalty"
+              component={Penalty}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -61,11 +73,6 @@ export default function App() {
             <Stack.Screen
               name="Rappel"
               component={Rappel}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Gestion"
-              component={Gestion}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

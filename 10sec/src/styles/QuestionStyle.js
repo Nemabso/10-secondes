@@ -5,6 +5,7 @@ export default {
   backgroundImage: {
     flex: 1,
     resizeMode: "cover",
+    flexDirection: "column",
   },
 
   img: {
@@ -13,6 +14,21 @@ export default {
     resizeMode: "contain",
   },
   centercontainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  centercontainer1: {
+    flex: 1,
+
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  begin: {
+    flex: 1,
+    marginTop: 30,
+
     justifyContent: "center",
     alignItems: "center",
   },
@@ -27,9 +43,9 @@ export default {
     textAlign: "center",
     fontWeight: "bold",
     color: "#6C3483",
-    marginTop: 110,
+    //marginTop: 20,
     lineHeight: 40,
-    marginBottom: 60,
+    //marginBottom: 60,
   },
   clickText: {
     fontSize: 14,
@@ -38,7 +54,6 @@ export default {
     fontWeight: "bold",
     color: "#6C3483",
     marginTop: 15,
-    marginBottom: 80,
   },
   click1Text: {
     fontSize: 16,
@@ -47,15 +62,14 @@ export default {
     fontWeight: "bold",
     color: "#6C3483",
     marginTop: 10,
-    marginBottom: 80,
+    //marginBottom: 80,
   },
   finishText: {
     fontSize: 26,
     textAlign: "center",
     fontWeight: "bold",
     color: "#6C3483",
-    marginTop: 130,
-    marginBottom: 90,
+    //marginBottom: 60,
   },
   questionText: {
     fontSize: 22,
@@ -83,12 +97,12 @@ export default {
     flex: 1,
     borderRightWidth: 2,
     borderColor: "#FFFFFF",
-    height: 120,
+
     justifyContent: "center",
     alignItems: "center",
   },
   col2: {
-    flex: 1.7,
+    flex: 1.5,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 15,
@@ -102,7 +116,7 @@ export default {
     width: 300,
     height: 120,
     borderRadius: 10,
-    marginTop: 60,
+    marginTop: 20,
   },
   questionIcon: {
     borderWidth: 2,
@@ -112,13 +126,12 @@ export default {
     width: 340,
     height: 140,
     textAlign: "center",
-    marginTop: 30,
+    marginTop: 20,
     borderRadius: 10,
   },
   minuteurImage: {
-    marginTop: 30,
-    width: 240,
-    height: 240,
+    width: 235,
+    height: 235,
     resizeMode: "contain",
   },
 
@@ -163,6 +176,23 @@ export default {
     height: 60,
     backgroundColor: "#6C3483",
     borderRadius: 10,
-    marginTop: 80,
+    //marginTop: 80,
+  },
+  center2: {
+    flex: 2.8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  center3: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    //backgroundColor: "#000000",
+  },
+  center4: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginBottom: 30,
   },
 };

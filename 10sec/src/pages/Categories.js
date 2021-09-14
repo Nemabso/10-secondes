@@ -10,12 +10,12 @@ import {
   SafeAreaView,
 } from "react-native";
 
+
 import CategoriesStyle from "../styles/CategoriesStyle";
 const styles = StyleSheet.create({ ...CategoriesStyle });
-import background_purple from "../../assets/background_purple.png";
+import background_purple from "../../assets/background_purple1.png";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { setrappel } from "../Actions/playActions";
-
+// import data from "../../assets/dt.json";
 import Constants from "expo-constants";
 import * as SQLite from "expo-sqlite";
 import * as FileSystem from "expo-file-system";
@@ -24,6 +24,13 @@ import { Asset } from "expo-asset";
 import { connect } from "react-redux";
 import { setcategory } from "../Actions/playActions";
 import { setquestions } from "../Actions/playActions";
+import {
+
+  setplayer,
+  setplayerindex,
+  setquestionindex,
+  setrappel,
+} from "../Actions/playActions";
 
 function importDB() {
   // load in db
@@ -32,7 +39,12 @@ function importDB() {
     `${FileSystem.documentDirectory}SQLite/databaseV1_2.db`
   );
 }
-
+const data1= require("../../assets/questions/HistGeo.json");
+const data2= require("../../assets/questions/CultureGeneral.json");
+const data3= require("../../assets/questions/Divertissement.json");
+const data4= require("../../assets/questions/Sport.json");
+const data5= require("../../assets/questions/Pimente.json");
+const data6=require("../../assets/questions/dt.json");
 class Categories extends Component {
   constructor(props) {
     super(props);
@@ -40,6 +52,12 @@ class Categories extends Component {
       questions: null,
     };
   }
+ componentDidMount () {
+   
+   
+  }
+  
+   
   categories = [
     "Culture générale",
     "Histoire/Géo",
@@ -82,27 +100,94 @@ class Categories extends Component {
       dbname: "Pimenté",
     },
   ];
-  /*componentDidMount() {
-    this.importQuestions();
-  }*/
+
+  Gestion = async () => {
+    /*for (let i = 0; i < 6; i++) {
+      console.log("hana");
+      var quests = this.props.questions[i];
+      if (quests.category === this.props.category.dbname) {
+        var list = quests.questions;
+
+        //console.log(list);
+        var Quest = list[this.props.questionindex];
+        var temp = Quest.Temps;
+        var que = Quest.Question;
+      }
+    }*/
+    var randomNumber;
+    if(this.props.category.dbname==="Histoire/Géo"){
+      randomNumber=Math.floor(Math.random() * 99);
+      var que =data1.features[randomNumber].properties.Question;
+      var temp = data1.features[randomNumber].properties.Temps;
+
+    }
+    if(this.props.category.dbname==="Culture générale" ){
+      randomNumber=Math.floor(Math.random() * 99);
+      var que =data2.features[randomNumber].properties.Question;
+      var temp = data2.features[randomNumber].properties.Temps;
+    }
+    if(this.props.category.dbname==="Divertissement" ){
+      randomNumber=Math.floor(Math.random() * 99);
+      var que =data3.features[randomNumber].properties.Question;
+      var temp = data3.features[randomNumber].properties.Temps;
+
+    }
+    if(this.props.category.dbname==="Sport"){
+      randomNumber=Math.floor(Math.random() * 99);
+      var que =data4.features[randomNumber].properties.Question;
+      var temp = data4.features[randomNumber].properties.Temps;
+
+    }
+    if(this.props.category.dbname==="Aléatoire" ){
+      randomNumber=Math.floor(Math.random() * 500);
+      var que =data6.features[randomNumber].properties.Question;
+      var temp = data6.features[randomNumber].properties.Temps;
+
+    }
+    if(this.props.category.dbname==="Pimenté" ){
+      randomNumber=Math.floor(Math.random() * 99);
+      var que =data5.features[randomNumber].properties.Question;
+      var temp = data5.features[randomNumber].properties.Temps;
+
+    }
+    
+
+    const player = {
+      name: this.props.playersok[this.props.playerindex].name,
+      image: this.props.playersok[this.props.playerindex].image,
+      questiontime: temp,
+      question: que,
+    };
+    this.props.setplayer(player);
+    if (this.props.playerindex == this.props.playersok.length - 1) {
+      this.props.setplayerindex(0);
+    } else {
+      this.props.setplayerindex(this.props.playerindex + 1);
+    }
+    if (this.props.questionindex == 99) {
+      this.props.setquestionindex(0);
+    } else {
+      this.props.setquestionindex(this.props.questionindex + 1);
+    }
+    if (this.props.rappel == true) {
+      this.props.navigation.navigate("Rappel");
+      this.props.setrappel(false);
+    } else {
+      this.props.navigation.navigate("Warning");
+    }
+  };
+
   ItemView = ({ item, index }) => {
     return (
       <View>
         <TouchableOpacity
           style={styles.item}
           onPress={async () => {
-            this.props.setcategory(item);
-
-            //console.log("first question : "+d);
-            //console.log("questions : "+this.props.questions[0].Question);
-            /*let data = [];
-            data.push({
-              Temps: 5,
-              Question: "5 fruits qui commencent par la lettre R?",
-            });
-            this.props.setquestions(data);*/
-            //console.log(this.props.questions);
-            this.props.navigation.navigate("Gestion");
+            await this.props.setcategory(item);
+            //console.log("ps");
+            //console.log(this.props.category);
+            //console.log("ps");
+            await this.Gestion();
           }}
         >
           <Image source={item.image} style={styles.img} />
@@ -112,114 +197,73 @@ class Categories extends Component {
     );
   };
 
-  executeSql = (db, sql, params = []) => {
-    return new Promise((resolve, reject) =>
-      db.transaction((tx) => {
-        tx.executeSql(
-          sql,
-          params,
-          (_, { rows }) => resolve(rows._array),
-          reject
-        );
-      })
-    );
-  };
-
-  importQuestions = async () => {
-    importDB();
-    var list = [];
-    let db = SQLite.openDatabase("databaseV1_2.db");
-
-    console.log("dbdbdbd" + db);
-    for (let i = 0; i < 6; i++) {
-      await this.executeSql(
-        db,
-        "SELECT * from questions order by RANDOM()",
-        []
-      ).then((items) => list.push({ items }["items"]));
-    }
-    this.props.setquestions(list);
-    console.log(list);
-    /*if (category === "")
-      await this.executeSql(
-        db,
-        "SELECT * from questions order by RANDOM()",
-        []
-      ).then((items) => this.props.setquestions({ items }["items"]));
-    else
-      await this.executeSql(
-        db,
-        "SELECT * from questions where Categorie = ? order by RANDOM()",
-        [category]
-      ).then((items) => this.props.setquestions({ items }["items"]));*/
-  };
-
-  goCategory = (category) => {
-    this.props.setcategory(category);
-    this.props.navigation.navigate("Gestion");
-  };
-
+  
   render() {
     return (
-      <View style={styles.container}>
-        <ImageBackground
-          source={background_purple}
-          style={styles.backgroundImage}
-        >
+      <ImageBackground
+        source={background_purple}
+        style={styles.backgroundImage}
+      >
+        <View style={styles.rowcontainer3}>
+          <View style={styles.col1}>
+            <TouchableOpacity
+              style={styles.backIcon}
+              onPress={() => {
+                this.props.navigation.navigate("Registering");
+                this.props.setrappel(true);
+              }}
+            >
+              <Icon name={"chevron-left"} size={25} color="white" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.col2}>
+            <Text style={styles.titletext}>CATÉGORIES</Text>
+          </View>
+        </View>
+        <View style={styles.centercontainer}>
           <View style={styles.rowcontainer}>
-            <View style={styles.col1}>
-              <TouchableOpacity
-                style={styles.backIcon}
-                onPress={() => {
-                  this.props.navigation.navigate("Registering");
-                  this.props.setrappel(true);
-                }}
-              >
-                <Icon name={"chevron-left"} size={25} color="white" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.col2}>
-              <Text style={styles.titletext}>CATÉGORIES</Text>
-            </View>
-          </View>
-          <View style={styles.centercontainer}>
-            <View style={styles.rowcontainer}>
-              <View style={styles.col3}>
-                <View>
-                  <SafeAreaView style={{ flex: 1 }}>
-                    <FlatList
-                      data={this.CATEGORIES1}
-                      keyExtractor={(item, index) => index.toString()}
-                      //ItemSeparatorComponent={this.ItemSeparatorView}
-                      renderItem={this.ItemView}
-                    />
-                  </SafeAreaView>
-                </View>
+            <View style={styles.col3}>
+              <View>
+                <SafeAreaView style={{ flex: 1 }}>
+                  <FlatList
+                    data={this.CATEGORIES1}
+                    keyExtractor={(item, index) => index.toString()}
+                    //ItemSeparatorComponent={this.ItemSeparatorView}
+                    renderItem={this.ItemView}
+                  />
+                </SafeAreaView>
               </View>
-              <View style={styles.col4}>
-                <View>
-                  <SafeAreaView style={{ flex: 1 }}>
-                    <FlatList
-                      data={this.CATEGORIES2}
-                      keyExtractor={(item, index) => index.toString()}
-                      //ItemSeparatorComponent={this.ItemSeparatorView}
-                      renderItem={this.ItemView}
-                    />
-                  </SafeAreaView>
-                </View>
+            </View>
+            <View style={styles.col4}>
+              <View>
+                <SafeAreaView style={{ flex: 1 }}>
+                  <FlatList
+                    data={this.CATEGORIES2}
+                    keyExtractor={(item, index) => index.toString()}
+                    //ItemSeparatorComponent={this.ItemSeparatorView}
+                    renderItem={this.ItemView}
+                  />
+                </SafeAreaView>
               </View>
             </View>
           </View>
-        </ImageBackground>
-      </View>
+        </View>
+      </ImageBackground>
     );
   }
 }
 const mapStatetoProps = (state) => {
   return {
     playersok: state.playReducer.playersok,
-    player: state.playReducer.player,
+    play: state.playReducer.play,
+    numberPlayers: state.playReducer.numberPlayers,
+    playerindex: state.playReducer.playerindex,
+    rappel: state.playReducer.rappel,
     questions: state.playReducer.questions,
+    questionindex: state.playReducer.questionindex,
+    category: state.playReducer.category,
+    playersok: state.playReducer.playersok,
+    player: state.playReducer.player,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -227,6 +271,10 @@ const mapDispatchToProps = (dispatch) => {
     setcategory: (category) => dispatch(setcategory(category)),
     setquestions: (questions) => dispatch(setquestions(questions)),
     setrappel: (bool) => dispatch(setrappel(bool)),
+    setplayer: (player) => dispatch(setplayer(player)),
+    setplayerindex: (playerindex) => dispatch(setplayerindex(playerindex)),
+    setquestionindex: (questionindex) =>
+      dispatch(setquestionindex(questionindex)),
   };
 };
 

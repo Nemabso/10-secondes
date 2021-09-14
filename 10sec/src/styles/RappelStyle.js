@@ -1,10 +1,8 @@
 export default {
-  container: {
-    flex: 1,
-  },
   backgroundImage: {
     flex: 1,
     resizeMode: "cover", // or 'stretch'
+    flexDirection: "column",
   },
 
   centercontainer: {
@@ -15,43 +13,58 @@ export default {
   hellotext: {
     alignItems: "center",
     justifyContent: "center",
-     
   },
+  center0: {
+    flex:1,
+    marginTop:20,
+  },
+  center1: {
+    
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 5,
+    marginTop:50,
+   
+  },
+  center2: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 2.5,
+    
+ 
+   
+    
+  },
+  
   text: {
     alignItems: "center",
     justifyContent: "center",
     lineHeight: 37,
-    marginBottom: 50,
-     
   },
 
   text1: {
-    marginBottom: 120,
     fontSize: 28,
     color: "#FFFFFF",
     fontWeight: "bold",
-     
   },
 
   text2: {
     fontSize: 20,
     color: "#FFFFFF",
     fontWeight: "bold",
-     
   },
 
   text3: {
     fontSize: 20,
     color: "#FFFFFF",
     fontWeight: "bold",
-     
   },
 
   gotext: {
     fontSize: 18,
     color: "white",
     fontWeight: "bold",
-     
+
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
@@ -68,5 +81,10 @@ export default {
     backgroundColor: "#6C3483",
     borderRadius: 10,
     marginTop: 15,
+  },
+  bannerAd:{
+    flex:0.7,
+    marginBottom:20,
+  
   },
 };

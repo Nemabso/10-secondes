@@ -1,24 +1,31 @@
 export default {
-  container: {
-    flex: 1,
-  },
   backgroundImage: {
     flex: 1,
     resizeMode: "cover", // or 'stretch'
+    flexDirection: "column",
   },
-
+  begin: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 5,
+  },
+  buttons: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 3,
+  },
   logoContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginLeft: "auto",
     marginRight: "auto",
     alignItems: "center",
+    marginTop: 60,
   },
 
   logoChrono: {
     width: 117,
     height: 140,
-    marginTop: 75,
   },
 
   text1: {
@@ -49,13 +56,12 @@ export default {
     borderColor: "#6C3483",
     alignItems: "center",
     justifyContent: "center",
-    width: 90,
+    width: 100,
     height: 50,
     backgroundColor: "#6C3483",
     borderRadius: 10,
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 65,
   },
 
   button1Icon: {
@@ -63,25 +69,25 @@ export default {
     borderColor: "#6C3483",
     alignItems: "center",
     justifyContent: "center",
-    width: 90,
+    width: 100,
     height: 50,
     backgroundColor: "#6C3483",
     borderRadius: 10,
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 15,
+    marginTop: 20,
   },
 
   creditsContainer: {
-    flex: 1,
+    flex: 0.5,
     justifyContent: "flex-end",
-    marginBottom: 3,
+    marginBottom: 8,
   },
 
   creditsText: {
     marginLeft: "auto",
     marginRight: "auto",
-    fontSize: 17,
+    fontSize: 18,
     color: "black",
     fontWeight: "bold",
   },

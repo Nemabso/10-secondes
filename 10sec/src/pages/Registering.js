@@ -12,8 +12,15 @@ import {
   FlatList,
   Alert,
   SafeAreaView,
+  TouchableHighlight,
 } from "react-native";
 import { connect } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
+import {
+
+  AdMobInterstitial,
+  setTestDeviceIDAsync,
+} from 'expo-ads-admob';
 
 import { NavigationEvents } from "react-navigation";
 
@@ -25,6 +32,15 @@ import txtFieldBorder from "../../assets/txtFieldBorder.png";
 import { setplayersok } from "../Actions/playActions";
 import { setnumberplayers } from "../Actions/playActions";
 
+const createAlert = () =>
+  Alert.alert(
+    "",
+    "Tu peux modifier la photo de profil de chaque joueur en cliquant sur son avatar.\n" +
+    "N'hésite pas à utiliser la pire photo de chacun.",
+    [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+    { cancelable: true }
+  );
+
 class Registering extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +49,7 @@ class Registering extends Component {
       players: [],
     };
   }
+
   IMAGES = {
     perso1: require("../../assets/personages/perso1.png"), // statically analyzed
     perso2: require("../../assets/personages/perso2.png"), // statically analyzed
@@ -65,14 +82,17 @@ class Registering extends Component {
       let url = "perso" + ind + "";
       let bordername = "border" + ind + "";
       list.push({
-        image: url,
+        image: this.IMAGES[url],
         border: bordername,
         name: "",
+        score: 0,
+        roundscore: 0,
       });
     }
     await this.setState({ players: list });
   };
   async componentDidMount() {
+    createAlert();
     await this.setPlayers();
   }
 
@@ -80,7 +100,32 @@ class Registering extends Component {
     return (
       <View style={styles.rowcontainer}>
         <View style={styles.col3}>
-          <Image source={this.IMAGES[item.image]} style={styles.img} />
+          <TouchableHighlight
+            onPress={() =>
+              Alert.alert(
+                "Modifier l'image",
+                "N'hésite pas à utiliser la pire photo",
+
+                [
+                  {
+                    text: "Camera",
+                    onPress: async () => {
+                      this.setPlayerImage(await openCamera(), index);
+                    },
+                  },
+                  {
+                    text: "Galerie",
+                    onPress: async () => {
+                      this.setPlayerImage(await openImagePickerAsync(), index);
+                    },
+                  },
+                ],
+                { cancelable: true }
+              )
+            }
+          >
+            <Image source={item.image} style={styles.img} />
+          </TouchableHighlight>
         </View>
         <View style={styles.col4}>
           <TextInput
@@ -98,6 +143,13 @@ class Registering extends Component {
   setPlayer = async (text, index) => {
     let newPlayers = [...this.state.players];
     newPlayers[index].name = text;
+    await this.setState({
+      players: newPlayers,
+    });
+  };
+  setPlayerImage = async (img, index) => {
+    let newPlayers = [...this.state.players];
+    newPlayers[index].image = { uri: img.localUri };
     await this.setState({
       players: newPlayers,
     });
@@ -135,28 +187,36 @@ class Registering extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <ImageBackground
-          source={background_NoMotif}
-          style={styles.backgroundImage}
-        >
-          <View style={styles.rowcontainer}>
-            <View style={styles.col1}>
-              <TouchableOpacity
-                style={styles.backIcon}
-                onPress={() => this.props.navigation.navigate("Welcome")}
-              >
-                <Icon name={"chevron-left"} size={25} color="white" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.col2}>
-              <Text style={styles.titletext}>Nomme les joueurs</Text>
-              <Text style={styles.text}>
-                (N'hésite pas à mettre les pires surnoms de chacun {"\n"} Soyez
-                au minimum deux à jouer)
-              </Text>
-            </View>
+      <ImageBackground
+        source={background_NoMotif}
+        style={styles.backgroundImage}
+      >
+        <View style={styles.rowcontainer1}>
+          <View style={styles.col1}>
+            <TouchableOpacity
+              style={styles.backIcon}
+              onPress={ async () => {
+                this.props.navigation.navigate("Welcome");
+                await AdMobInterstitial.setAdUnitID('ca-app-pub-8171099142584641/7280152931'); // Test ID, Replace with your-admob-unit-id
+                await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
+                await AdMobInterstitial.showAdAsync();
+                
+              }
+              }
+            >
+              <Icon name={"chevron-left"} size={25} color="white" />
+            </TouchableOpacity>
           </View>
+          <View style={styles.col2}>
+            <Text style={styles.titletext}>Nomme les joueurs</Text>
+            <Text style={styles.text}>
+              (N'hésite pas à mettre les pires surnoms de chacun {"\n"} Soyez au
+              minimum deux à jouer)
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.center}>
           <View style={styles.scroll}>
             <SafeAreaView style={{ flex: 1 }}>
               <FlatList
@@ -167,15 +227,53 @@ class Registering extends Component {
               />
             </SafeAreaView>
           </View>
+        </View>
 
-          <TouchableOpacity style={styles.playIcon} onPress={this.Play}>
-            <Text style={styles.playtext}>JOUER {">"}</Text>
-          </TouchableOpacity>
-        </ImageBackground>
-      </View>
+        <View style={styles.end}>
+          <View style={styles.endLeft}></View>
+          <View style={styles.endRight}>
+            <TouchableOpacity style={styles.playIcon} onPress={this.Play}>
+              <Text style={styles.playtext}>JOUER {">"}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ImageBackground>
     );
   }
 }
+
+async function openImagePickerAsync() {
+  const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+  if (permissionResult.granted === false) {
+    alert("Permission to access camera roll is required!");
+    return;
+  }
+
+  const pickerResult = await ImagePicker.launchImageLibraryAsync();
+  if (pickerResult.cancelled === true) {
+    return;
+  }
+  return { localUri: pickerResult.uri };
+}
+
+async function openCamera() {
+  // Ask the user for the permission to access the camera
+  const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+  if (permissionResult.granted === false) {
+    alert("Permission to access the camera is required!");
+    return;
+  }
+
+  const pickerResult = await ImagePicker.launchCameraAsync();
+
+  if (pickerResult.cancelled === true) {
+    return;
+  }
+  return { localUri: pickerResult.uri };
+}
+
 const mapStatetoProps = (state) => {
   return {
     playersok: state.playReducer.playersok,

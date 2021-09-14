@@ -1,10 +1,8 @@
 export default {
-  container: {
-    flex: 1,
-  },
   backgroundImage: {
     flex: 1,
     resizeMode: "cover", // or 'stretch'
+    flexDirection: "column",
   },
   backIcon: {
     borderWidth: 1,
@@ -15,18 +13,30 @@ export default {
     height: 45,
     backgroundColor: "#F39C12",
     borderRadius: 50,
-    marginTop: 50,
+
     marginLeft: 20,
   },
-  rowcontainer: {
+  rowcontainer3: {
+    alignItems: "center",
+    justifyContent: "center",
     flexDirection: "row",
+    flex: 1,
+    marginTop: 20,
+  },
+  rowcontainer: {
+    marginTop:5,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    flex: 1,
   },
   col1: {
     flex: 1,
+    marginTop: 20,
   },
   col2: {
     flex: 3,
-    paddingTop: 60,
+    marginTop: 20,
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
@@ -46,7 +56,7 @@ export default {
 
   col3: {
     flex: 1,
-    paddingTop: 30,
+
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
@@ -54,7 +64,7 @@ export default {
 
   col4: {
     flex: 1,
-    paddingTop: 30,
+
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
@@ -71,8 +81,10 @@ export default {
     alignItems: "center",
   },
   centercontainer: {
+    flex: 5,
     justifyContent: "center",
     alignItems: "center",
+   
   },
   text: {
     fontSize: 24,

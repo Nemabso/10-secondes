@@ -24,7 +24,7 @@ import { connect } from "react-redux";
 import { setcategory } from "../Actions/playActions";
 import { setquestions } from "../Actions/playActions";
 
-const createTwoButtonAlert = () =>
+/*const createTwoButtonAlert = () =>
   Alert.alert(
     "",
     "L’abus d’alcool est dangereux pour la santé. \nEn poursuivant sur " +
@@ -38,8 +38,7 @@ function importDB() {
     Asset.fromModule(require("../../assets/databaseV1_1.db")).uri,
     `${FileSystem.documentDirectory}SQLite/databaseV1_2.db`
   );
-}
-
+}*/
 class Welcome extends Component {
   categories = [
     "Culture générale",
@@ -49,9 +48,13 @@ class Welcome extends Component {
     "Pimenté",
     "Aléatoire",
   ];
-  componentDidMount() {
+  async componentDidMount () {
+   
+  }
+ /* 
+ componentDidMount() {
     console.log(this.categories);
-    this.importQuestions(this.categories);
+   // await this.importQuestions(this.categories);
     //createTwoButtonAlert();
   }
   executeSql = (db, sql, params = []) => {
@@ -96,28 +99,18 @@ class Welcome extends Component {
       }
     }
     this.props.setquestions(list);
-    //console.log(list);
-    //console.log(list[0]);
-    /*if (category === "")
-      await this.executeSql(
-        db,
-        "SELECT * from questions order by RANDOM()",
-        []
-      ).then((items) => this.props.setquestions({ items }["items"]));
-    else
-      await this.executeSql(
-        db,
-        "SELECT * from questions where Categorie = ? order by RANDOM()",
-        [category]
-      ).then((items) => this.props.setquestions({ items }["items"]));*/
-  };
+  };*/
+  Play = async ()=> {
+    this.props.navigation.navigate("Registering");
+
+  }
   render() {
     return (
-      <View style={styles.container}>
-        <ImageBackground
-          source={background_degrade}
-          style={styles.backgroundImage}
-        >
+      <ImageBackground
+        source={background_degrade}
+        style={styles.backgroundImage}
+      >
+        <View style={styles.begin}>
           <View style={styles.logoContainer}>
             <Image
               style={styles.logoChrono}
@@ -126,10 +119,11 @@ class Welcome extends Component {
           </View>
           <Text style={styles.text1}>Bienvenue</Text>
           <Text style={styles.text2}>Sur le jeu mobile 10 sec.</Text>
-
+        </View>
+        <View style={styles.buttons}>
           <TouchableOpacity
             style={styles.buttonIcon}
-            onPress={() => this.props.navigation.navigate("Registering")}
+            onPress={this.Play}
           >
             <Text style={styles.buttonText}>JOUER</Text>
           </TouchableOpacity>
@@ -139,14 +133,13 @@ class Welcome extends Component {
           >
             <Text style={styles.buttonText}>RÈGLES</Text>
           </TouchableOpacity>
-          <View style={styles.creditsContainer}>
-            <Text style={styles.creditsText}>
-              Design par{" "}
-              <Text style={{ color: "#CB0DA5" }}>Manon Gratte ©</Text>
-            </Text>
-          </View>
-        </ImageBackground>
-      </View>
+        </View>
+        <View style={styles.creditsContainer}>
+          <Text style={styles.creditsText}>
+            Design par <Text style={{ color: "#CB0DA5" }}>Manon Gratte ©</Text>
+          </Text>
+        </View>
+      </ImageBackground>
     );
   }
 }

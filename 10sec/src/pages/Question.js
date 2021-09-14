@@ -15,7 +15,17 @@ import background_degrade from "../../assets/background_degrade.jpg";
 import { connect } from "react-redux";
 import { setvalue } from "../Actions/playActions";
 import { Audio } from "expo-av";
-
+import {
+  setplayer,
+  setplayerindex,
+  setquestionindex,
+  setrappel,
+} from "../Actions/playActions";
+const data1= require("../../assets/questions/HistGeo.json");
+const data2= require("../../assets/questions/CultureGeneral.json");
+const data3= require("../../assets/questions/Divertissement.json");
+const data4= require("../../assets/questions/Sport.json");
+const data5= require("../../assets/questions/Pimente.json");
 class Question extends Component {
   constructor(props) {
     super(props);
@@ -32,14 +42,7 @@ class Question extends Component {
 
   time = "minuteur" + this.props.player.questiontime + "";
 
-  componentDidMount() {
-    /*return this.state.sound
-      ? () => {
-          console.log("Unloading Sound");
-          sound.unloadAsync();
-        }
-      : undefined;*/
-  }
+  componentDidMount() {}
 
   playSound = async () => {
     const { sound } = await Audio.Sound.createAsync(
@@ -50,23 +53,27 @@ class Question extends Component {
     await sound.playAsync();
   };
 
+ 
   renderView() {
     if (this.props.value === 1) {
       return (
         <View style={styles.centercontainer}>
-          <Text style={styles.mainText}>
-            Tu as {this.props.player.questiontime} secondes {"\n"} pour me
-            citer:
-          </Text>
-
-          <View style={styles.questionIcon}>
-            <Text style={styles.questionText}>
-              {this.props.player.question} ?
+          <View style={styles.center3}>
+            <Text style={styles.mainText}>
+              Tu as {this.props.player.questiontime} secondes {"\n"} pour me
+              citer:
             </Text>
           </View>
-          <Text style={styles.clickText}>
-            Cliquer sur l'écran pour commencer.
-          </Text>
+          <View style={styles.center4}>
+            <View style={styles.questionIcon}>
+              <Text style={styles.questionText}>
+                {this.props.player.question} ?
+              </Text>
+            </View>
+            <Text style={styles.clickText}>
+              Cliquer sur l'écran pour commencer.
+            </Text>
+          </View>
         </View>
       );
     }
@@ -74,18 +81,22 @@ class Question extends Component {
       setTimeout(() => {
         this.playSound();
         this.props.setvalue(3);
-      }, (this.props.player.questiontime + 1) * 1000);
+      }, (this.props.player.questiontime+1.6) * 1000);
 
       return (
         <View style={styles.centercontainer}>
-          <Image
-            source={this.MINUTEURS[this.time]}
-            style={styles.minuteurImage}
-          />
-          <View style={styles.questionIcon}>
-            <Text style={styles.questionText}>
-              {this.props.player.question} ?
-            </Text>
+          <View style={styles.center3}>
+            <Image
+              source={this.MINUTEURS[this.time]}
+              style={styles.minuteurImage}
+            />
+          </View>
+          <View style={styles.center4}>
+            <View style={styles.questionIcon}>
+              <Text style={styles.questionText}>
+                {this.props.player.question} ?
+              </Text>
+            </View>
           </View>
         </View>
       );
@@ -93,14 +104,19 @@ class Question extends Component {
     if (this.props.value === 3) {
       return (
         <View style={styles.centercontainer}>
-          <Text style={styles.finishText}>Le temps est terminé!</Text>
-
-          <View style={styles.questionIcon}>
-            <Text style={styles.questionText}>
-              {this.props.player.question} ?
+          <View style={styles.center3}>
+            <Text style={styles.finishText}>Le temps est terminé!</Text>
+          </View>
+          <View style={styles.center4}>
+            <View style={styles.questionIcon}>
+              <Text style={styles.questionText}>
+                {this.props.player.question} ?
+              </Text>
+            </View>
+            <Text style={styles.clickText}>
+              Cliquer sur l'écran pour passer.
             </Text>
           </View>
-          <Text style={styles.clickText}>Cliquer sur l'écran pour passer.</Text>
         </View>
       );
     }
@@ -111,22 +127,21 @@ class Question extends Component {
       this.props.setvalue(2);
     }
     if (this.props.value === 3) {
-      this.props.setvalue(1);
-      this.props.navigation.navigate("Gestion");
+      this.props.navigation.navigate("Scores");
     }
   };
 
   render() {
     return (
-      <View style={styles.container}>
-        <ImageBackground
-          source={background_degrade}
-          style={styles.backgroundImage}
+      <ImageBackground
+        source={background_degrade}
+        style={styles.backgroundImage}
+      >
+        <TouchableOpacity
+          style={styles.centercontainer1}
+          onPress={this.touchScreen}
         >
-          <TouchableOpacity
-            style={styles.centercontainer}
-            onPress={this.touchScreen}
-          >
+          <View style={styles.begin}>
             <View style={styles.topIcon}>
               <View style={styles.rowcontainer}>
                 <View style={styles.col1}>
@@ -150,10 +165,10 @@ class Question extends Component {
                 </View>
               </View>
             </View>
-            {this.renderView()}
-          </TouchableOpacity>
-        </ImageBackground>
-      </View>
+          </View>
+          <View style={styles.center2}>{this.renderView()}</View>
+        </TouchableOpacity>
+      </ImageBackground>
     );
   }
 }
@@ -162,11 +177,24 @@ const mapStatetoProps = (state) => {
     player: state.playReducer.player,
     category: state.playReducer.category,
     value: state.playReducer.value,
+    playersok: state.playReducer.playersok,
+    play: state.playReducer.play,
+    numberPlayers: state.playReducer.numberPlayers,
+    playerindex: state.playReducer.playerindex,
+    rappel: state.playReducer.rappel,
+    questions: state.playReducer.questions,
+    questionindex: state.playReducer.questionindex,
+    category: state.playReducer.category,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     setvalue: (value) => dispatch(setvalue(value)),
+    setplayer: (player) => dispatch(setplayer(player)),
+    setplayerindex: (playerindex) => dispatch(setplayerindex(playerindex)),
+    setquestionindex: (questionindex) =>
+      dispatch(setquestionindex(questionindex)),
+    setrappel: (bool) => dispatch(setrappel(bool)),
   };
 };
 

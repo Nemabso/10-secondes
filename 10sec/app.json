@@ -2,14 +2,13 @@
   "expo": {
     "name": "10 Secondes",
     "slug": "10Secondes",
-    "version": "1.0.0",
+    "version": "1.0.10",
     "orientation": "portrait",
     "sdkVersion": "42.0.0",
     "icon": "./assets/1024x1024bb.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/splash3.png",
+      "resizeMode": "cover"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -18,13 +17,26 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.example.10Secondes",
-      "buildNumber": "1.0.0"
+      "splash": {
+        "image": "./assets/splash3.png",
+        "resizeMode": "cover"
+      },
+      "buildNumber": "1.0.10",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to set the player photo in the game.",
+        "NSPhotoLibraryUsageDescription": "This app uses the photo library to set the player photo in the game."
+      },
+      "config": {
+       
+        "googleMobileAdsAppId": "ca-app-pub-8171099142584641~7996492324" 
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/launcher_icon_round.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "mevo.fegir.expoapp10s"
     },
     "web": {
       "favicon": "./assets/favicon.png"
